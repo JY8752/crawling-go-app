@@ -2,15 +2,16 @@ package crawling
 
 import (
 	"JY8752/crawling_app_batch/tokenizer"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"net/url"
 )
 
-func Crawling(url string) ([]string, error) {
+func Crawling(u string) ([]string, error) {
 	//baseURLのコンテンツ取得
-	res, err := http.Get(url)
+	res, err := http.Get(u)
 	if err != nil {
 		log.Printf("failed HTTP request err: %v\n", err.Error())
 		return nil, err
@@ -25,34 +26,28 @@ func Crawling(url string) ([]string, error) {
 	//取得したコンテンツのTokenizerを作成
 	ht := tokenizer.NewHtmlTokenizer(b)
 
-	//一旦、リンクURLかき集める
-	urls := ht.ExtractLinkUrl()
-
-	d, err := getDomain(url)
+	pu, err := url.Parse(u)
 	if err != nil {
-		log.Printf("failed parse url url: %v err: %v\n", url, err.Error())
+		log.Printf("failed parse url. url: %v err: %v\n", u, err.Error())
 		return nil, err
 	}
 
+	//一旦、リンクURLかき集める
+	urls := ht.ExtractLinkUrl(fmt.Sprintf("%v://%v", pu.Scheme, pu.Host))
+
+	fmt.Printf("extract urls %v\n", urls)
+
 	var result []string
-	for _, url := range urls {
-		dd, err := getDomain(url)
+	for _, uu := range urls {
+		puu, err := url.Parse(uu)
 		if err != nil {
-			log.Printf("failed parse url url: %v err: %v\n", url, err.Error())
+			log.Printf("failed parse url. url: %v err: %v\n", uu, err.Error())
 			continue
 		}
-		if dd == d {
-			result = append(result, url)
+		if puu.Host == pu.Host {
+			result = append(result, uu)
 		}
 	}
 
 	return result, nil
-}
-
-func getDomain(u string) (string, error) {
-	uu, err := url.Parse(u)
-	if err != nil {
-		return "", err
-	}
-	return uu.Host, nil
 }

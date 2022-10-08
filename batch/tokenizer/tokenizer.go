@@ -1,7 +1,9 @@
 package tokenizer
 
 import (
+	"JY8752/crawling_app_batch/utils"
 	"bytes"
+	"fmt"
 
 	"golang.org/x/net/html"
 )
@@ -18,7 +20,7 @@ func (ht *HtmlTokenizer) GetStringHtml() string {
 	return string(ht.html)
 }
 
-func (ht *HtmlTokenizer) ExtractLinkUrl() (urls []string) {
+func (ht *HtmlTokenizer) ExtractLinkUrl(host string) (urls []string) {
 	t := ht.getTokenizer()
 	for {
 		if t.Next() == html.ErrorToken {
@@ -28,7 +30,13 @@ func (ht *HtmlTokenizer) ExtractLinkUrl() (urls []string) {
 		if tk.Data == "a" && tk.Type.String() == "StartTag" {
 			for _, attr := range tk.Attr {
 				if attr.Key == "href" {
-					urls = append(urls, attr.Val)
+					u := attr.Val
+					nu, err := utils.NormalizeHrefUrl(u, host)
+					if err != nil {
+						fmt.Printf("remove failed normalize url. url: %v\n", u)
+						continue
+					}
+					urls = append(urls, nu.String())
 				}
 			}
 		}
