@@ -1,8 +1,9 @@
 package main
 
 import (
+	"JY8752/crawling_app_batch/array"
 	"JY8752/crawling_app_batch/crawling"
-	"JY8752/crawling_app_batch/utils"
+	"JY8752/crawling_app_batch/http"
 	"fmt"
 	"time"
 )
@@ -17,8 +18,11 @@ func main() {
 		counter     int
 	)
 
+	c := http.NewClient()
+	cr := crawling.NewClawler(c)
+
 	//エントリーポイントクローリング
-	nextUrls, err = crawling.Crawling(targetURL)
+	nextUrls, err = cr.Crawling(targetURL)
 	if err != nil {
 		fmt.Printf("failed crawling %v error %v\n", targetURL, err.Error())
 	}
@@ -42,18 +46,18 @@ loop:
 			//ブロックされないように少し待つ
 			time.Sleep(time.Second * 3)
 			//クローリング済みであれば巡回リストから除去して次へ
-			if utils.Contains(crawledUrls, url) {
-				nextUrls = utils.Remove(nextUrls, url)
+			if array.Contains(crawledUrls, url) {
+				nextUrls = array.Remove(nextUrls, url)
 				continue
 			}
 
 			//ページ巡回する
 			fmt.Printf("crawling page url: %v\n", url)
-			urls, err := crawling.Crawling(url)
+			urls, err := cr.Crawling(url)
 			fmt.Printf("extract link urls urls: %v\n", urls)
 
 			crawledUrls = append(crawledUrls, url)
-			nextUrls = utils.Remove(nextUrls, url)
+			nextUrls = array.Remove(nextUrls, url)
 
 			//クローリングに失敗したら巡回ずみにして次へ
 			if err != nil {
@@ -63,7 +67,7 @@ loop:
 
 			//未クローリングURLであれば巡回リストに追加する
 			for _, u := range urls {
-				if !utils.Contains(crawledUrls, u) {
+				if !array.Contains(crawledUrls, u) {
 					//未クローリング
 					nextUrls = append(nextUrls, u)
 				} else {

@@ -1,23 +1,30 @@
 package crawling
 
 import (
+	"JY8752/crawling_app_batch/http"
 	"JY8752/crawling_app_batch/tokenizer"
 	"fmt"
-	"io/ioutil"
 	"log"
-	"net/http"
 	"net/url"
 )
 
-func Crawling(u string) ([]string, error) {
-	//baseURLのコンテンツ取得
-	res, err := http.Get(u)
-	if err != nil {
-		log.Printf("failed HTTP request err: %v\n", err.Error())
-		return nil, err
+type (
+	Crawler struct {
+		Client http.ClientInterface
 	}
 
-	b, err := ioutil.ReadAll(res.Body)
+	CrawlerInterface interface {
+		Crawling() ([]string, error)
+	}
+)
+
+func NewClawler(c http.ClientInterface) *Crawler {
+	return &Crawler{Client: c}
+}
+
+func (c *Crawler) Crawling(u string) ([]string, error) {
+	//baseURLのコンテンツ取得
+	b, err := c.Client.Get(u)
 	if err != nil {
 		log.Printf("failed read response body err: %v\n", err.Error())
 		return nil, err

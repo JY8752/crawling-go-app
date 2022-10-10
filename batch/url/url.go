@@ -1,4 +1,4 @@
-package utils
+package url
 
 import (
 	"net/url"
@@ -10,6 +10,9 @@ func NormalizeHrefUrl(href, domain string) (*url.URL, error) {
 	if !strings.HasPrefix(href, "http") {
 		u = domain + href
 	}
+
+	//トレイリングスラッシュは除去しておく
+	u = strings.TrimSuffix(u, "/")
 
 	pu, err := url.Parse(u)
 	if err != nil {
