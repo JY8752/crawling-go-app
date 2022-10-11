@@ -3,12 +3,27 @@ package main
 import (
 	"JY8752/crawling_app_batch/array"
 	"JY8752/crawling_app_batch/crawling"
+	data "JY8752/crawling_app_batch/data/ent"
+	_ "JY8752/crawling_app_batch/env"
 	"JY8752/crawling_app_batch/http"
+	"context"
 	"fmt"
+	"os"
 	"time"
 )
 
 func main() {
+	//DB接続
+	ctx := context.Background()
+	cs := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true",
+		os.Getenv("MYSQL_USER"),
+		os.Getenv("MYSQL_PASSWORD"),
+		os.Getenv("MYSQL_DOMAIN"),
+		os.Getenv("MYSQL_PORT"),
+		os.Getenv("MYSQL_DATABASE"),
+	)
+	data.NewEntClient(ctx, cs)
+
 	targetURL := "https://lycoris-recoil.com/"
 	fmt.Printf("start crwling. %v\n", targetURL)
 	var (
