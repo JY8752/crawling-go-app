@@ -6,6 +6,8 @@ import (
 	"context"
 	"fmt"
 	"log"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 func NewEntClient(ctx context.Context, connectionString string) *ent.Client {

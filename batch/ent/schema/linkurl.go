@@ -24,10 +24,10 @@ func (LinkUrl) Fields() []ent.Field {
 			dialect.MySQL: "text",
 		}),
 		field.Time("created_at").SchemaType(map[string]string{
-			dialect.MySQL: "timestamp",
+			dialect.MySQL: "datetime",
 		}).Default(time.Now()),
 		field.Time("updated_at").SchemaType(map[string]string{
-			dialect.MySQL: "timestamp",
+			dialect.MySQL: "datetime",
 		}).Default(time.Now()),
 	}
 }

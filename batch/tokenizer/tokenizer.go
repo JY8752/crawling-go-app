@@ -33,10 +33,17 @@ func (ht *HtmlTokenizer) ExtractLinkUrl(host string) (urls []string) {
 				if attr.Key == "href" {
 					u := attr.Val
 					nu, err := url.NormalizeHrefUrl(u, host)
+
 					if err != nil {
 						fmt.Printf("remove failed normalize url. url: %v\n", u)
 						continue
 					}
+
+					//TOP画面除外
+					if nu.String() == host {
+						continue
+					}
+
 					urls = append(urls, nu.String())
 				}
 			}

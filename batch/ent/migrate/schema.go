@@ -12,8 +12,8 @@ var (
 	CrawledUrlsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "url", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},
-		{Name: "created_at", Type: field.TypeTime, SchemaType: map[string]string{"mysql": "timestamp"}},
-		{Name: "updated_at", Type: field.TypeTime, SchemaType: map[string]string{"mysql": "timestamp"}},
+		{Name: "created_at", Type: field.TypeTime, SchemaType: map[string]string{"mysql": "datetime"}},
+		{Name: "updated_at", Type: field.TypeTime, SchemaType: map[string]string{"mysql": "datetime"}},
 	}
 	// CrawledUrlsTable holds the schema information for the "crawled_urls" table.
 	CrawledUrlsTable = &schema.Table{
@@ -26,8 +26,8 @@ var (
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "url", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},
 		{Name: "referer", Type: field.TypeString, SchemaType: map[string]string{"mysql": "text"}},
-		{Name: "created_at", Type: field.TypeTime, SchemaType: map[string]string{"mysql": "timestamp"}},
-		{Name: "updated_at", Type: field.TypeTime, SchemaType: map[string]string{"mysql": "timestamp"}},
+		{Name: "created_at", Type: field.TypeTime, SchemaType: map[string]string{"mysql": "datetime"}},
+		{Name: "updated_at", Type: field.TypeTime, SchemaType: map[string]string{"mysql": "datetime"}},
 	}
 	// LinkUrlsTable holds the schema information for the "link_urls" table.
 	LinkUrlsTable = &schema.Table{

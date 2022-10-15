@@ -16,14 +16,18 @@ type (
 	CrawlerInterface interface {
 		Crawling() ([]string, error)
 	}
+
+	Result struct {
+		LinkUrls []string
+	}
 )
 
 func NewClawler(c http.ClientInterface) *Crawler {
 	return &Crawler{Client: c}
 }
 
-func (c *Crawler) Crawling(u string) ([]string, error) {
-	//baseURLのコンテンツ取得
+func (c *Crawler) Crawling(u string) (*Result, error) {
+	//コンテンツ取得
 	b, err := c.Client.Get(u)
 	if err != nil {
 		log.Printf("failed read response body err: %v\n", err.Error())
@@ -56,5 +60,5 @@ func (c *Crawler) Crawling(u string) ([]string, error) {
 		}
 	}
 
-	return result, nil
+	return &Result{LinkUrls: result}, nil
 }
