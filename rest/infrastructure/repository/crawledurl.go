@@ -26,3 +26,7 @@ func (cu *crawledUrl) Save(ctx context.Context, url string, time *time.Time) (*e
 func (cu *crawledUrl) FindById(ctx context.Context, id int) *ent.CrawledUrl {
 	return cu.client.CrawledUrl.GetX(ctx, id)
 }
+
+func (cu *crawledUrl) FindAll(ctx context.Context) []*ent.CrawledUrl {
+	return cu.client.CrawledUrl.Query().AllX(ctx)
+}

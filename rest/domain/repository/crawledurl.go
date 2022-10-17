@@ -9,4 +9,5 @@ import (
 type CrawledUrl interface {
 	Save(ctx context.Context, url string, time *time.Time) (*ent.CrawledUrl, error)
 	FindById(ctx context.Context, id int) *ent.CrawledUrl
+	FindAll(ctx context.Context) []*ent.CrawledUrl
 }
