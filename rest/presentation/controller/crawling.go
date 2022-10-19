@@ -28,11 +28,11 @@ func NewCrawlingController(cr domain.CrawledUrl) CrawlingController {
 
 func (cc *crawlingController) Register(ctx context.Context) {
 	http.HandleFunc("/crawling", func(w http.ResponseWriter, r *http.Request) {})
-	http.HandleFunc("/crawling/all", func(w http.ResponseWriter, r *http.Request) { crawlingAllHandle(ctx, cc.CrawlingService, w, r) })
+	http.HandleFunc("/crawling/all", func(w http.ResponseWriter, r *http.Request) { CrawlingAllHandle(ctx, cc.CrawlingService, w, r) })
 	http.HandleFunc("/crawling/details/{:id}", func(w http.ResponseWriter, r *http.Request) {})
 }
 
-func crawlingAllHandle(ctx context.Context, service service.CrawlingService, w http.ResponseWriter, r *http.Request) {
+func CrawlingAllHandle(ctx context.Context, service service.CrawlingService, w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
 		//クローリングしたサイトURLを全件取得する
