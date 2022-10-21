@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func JsonDecode[T comparable](r *http.Request, w http.ResponseWriter, params *T) *T {
+func JsonDecode[T any](r *http.Request, w http.ResponseWriter, params *T) *T {
 	dec := json.NewDecoder(r.Body)
 	if err := dec.Decode(params); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -14,7 +14,7 @@ func JsonDecode[T comparable](r *http.Request, w http.ResponseWriter, params *T)
 	return params
 }
 
-func JsonEncode[T comparable](buff *bytes.Buffer, v T) error {
+func JsonEncode[T any](buff *bytes.Buffer, v T) error {
 	enc := json.NewEncoder(buff)
 	return enc.Encode(v)
 }

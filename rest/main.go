@@ -10,6 +10,7 @@ import (
 	infrastructure "JY8752/crawling_app_rest/infrastructure/ent"
 	"JY8752/crawling_app_rest/presentation"
 
+	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
 )
 
@@ -29,8 +30,9 @@ func main() {
 	client := infrastructure.NewEntClient(ctx, cs)
 
 	//route登録
-	presentation.Route(ctx, client)
+	r := mux.NewRouter()
+	presentation.Route(ctx, client, r)
 
 	//server起動
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(":8080", r))
 }
